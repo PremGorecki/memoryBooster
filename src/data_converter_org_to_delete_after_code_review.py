@@ -2,13 +2,14 @@ import json
 import pandas as pd
 
 def RemoveNewLineCharacter(input):
-    return input.replace("\n", "")
+    output = input.replace("\n", "")
+    return output
 
 with (open("E:\\Mi unidad\\_PYTHON\\PycharmProjects\\memoryBooster\\data\\data_esp.txt", 'r', encoding='utf-8')
       as file):
     lines = file.readlines()
 
-class LearningItem:
+class Unit:
         def __init__(self, id, isTaught, isVerbIrregular, question, question1, question2, answer,
                      answer1, answer2, answer3, answer4, answer5, answer6,
                      interval, repetitionDate, easinessFactor, numberOfCorrectRepetitions, numberOfIncorrectRepetitions):
@@ -32,6 +33,12 @@ class LearningItem:
             self.easinessFactor = easinessFactor
             self.numberOfCorrectRepetitions = numberOfCorrectRepetitions
             self.numberOfIncorrectRepetitions = numberOfIncorrectRepetitions
+
+# units = [
+#     Unit(1, True, False, 'jeden', 'one'),
+#     Unit(2, True, False, 'dwa', 'two'),
+#     Unit(3, True, False, 'trzy', 'three')
+# ]
 
 units = [ ]
 
@@ -63,16 +70,21 @@ for i in range(numberOfUnits):
     easinessFactor = round(float(lines[(i)*19+17]),4)
     numberOfCorrectRepetitions = int(lines[(i)*19+18])
     numberOfIncorrectRepetitions = int(lines[(i)*19+19])
+    # print('i='+str(i))
+    # print('id='+id)
+    # print('numberOfCorrectRepetitions='+numberOfCorrectRepetitions)
+    # print('numberOfIncorrectRepetitions='+numberOfIncorrectRepetitions)
 
-    unit = LearningItem(id, isTaught, isVerbIrregular, question, question1, question2,
-                        answer, answer1, answer2, answer3, answer4, answer5, answer6,
-                        interval, repetitionDate, easinessFactor, numberOfCorrectRepetitions, numberOfIncorrectRepetitions)
+    unit = Unit(id, isTaught, isVerbIrregular, question, question1, question2,
+              answer, answer1, answer2, answer3, answer4, answer5, answer6,
+              interval, repetitionDate, easinessFactor, numberOfCorrectRepetitions, numberOfIncorrectRepetitions)
     units.append(unit)
 
 #Konwersja obiektu do słownika
 units_dict = []
 
 for unit in units:
+    # print('qqqq='+unit.question)
 
     units_dict.append({
     "id": unit.id,
@@ -95,6 +107,8 @@ for unit in units:
     "numberOfIncorrectRepetitions": unit.numberOfIncorrectRepetitions
     })
 
+# print(units_dict)
+
 #Ustawienie indent=4 spowoduje wcięcie o cztery spacje dla każdego zagnieżdżenia,
 #co sprawi, że plik JSON będzie sformatowany i czytelny.
 
@@ -103,22 +117,24 @@ with (open("E:\\Mi unidad\\_PYTHON\\PycharmProjects\\memoryBooster\\data\\data_e
       as json_file):
     json.dump(units_dict, json_file, ensure_ascii=False,  indent=4)
 
-def TheMostDifficultOrEasiestItems(howMany, isDifficutl ):
-    if (isDifficutl):
-        # Fifteen the most difficult items to lear
-        df = pd.DataFrame(units_dict)
-        df_sorted = df.sort_values('numberOfIncorrectRepetitions', ascending=False)
-        df_largest = df_sorted.nlargest(howMany, 'numberOfIncorrectRepetitions')
-        resultDF = df_largest.rename(columns={"numberOfIncorrectRepetitions": "IncRep"})
-        print("====The most difficult items=================")
-        print(resultDF[['question', 'answer', 'IncRep']])
-    else:
-        #Fifteen the easiest items to lear
-        df = pd.DataFrame(units_dict)
-        df_sorted = df[df.numberOfIncorrectRepetitions == 0].sort_values('numberOfCorrectRepetitions', ascending=False)
-        df_largest = df_sorted.nlargest(howMany, 'numberOfCorrectRepetitions')
-        resultDF = df_largest.rename(columns={"numberOfCorrectRepetitions": "CorRep"})
-        print("====The easies items=========================")
-        # Set up - maximum column width
-        resultDF['question2'] = resultDF['question'].str[0:15]
-        print(resultDF[['question2', 'answer', 'CorRep']])
+# Lub zapis do stringa JSON za pomocą json.dumps()
+# json_string = json.dumps(units_dict, ensure_ascii=False, indent=4)
+# print(json_string)
+
+# Fifteen the most difficult items to lear
+df = pd.DataFrame(units_dict)
+df2 = df.sort_values('numberOfIncorrectRepetitions', ascending=False)
+df2 = df2.nlargest(15, 'numberOfIncorrectRepetitions')
+df2 = df2.rename(columns={"numberOfIncorrectRepetitions": "IncRep"})
+print("====The most difficult items=================")
+print(df2[['question', 'answer', 'IncRep']])
+
+# Fifteen the easiest items to lear
+# df = pd.DataFrame(units_dict)
+# df3 = df[df.numberOfIncorrectRepetitions == 0].sort_values('numberOfCorrectRepetitions', ascending=False)
+# df3 = df3.nlargest(15, 'numberOfCorrectRepetitions')
+# df3 = df3.rename(columns={"numberOfCorrectRepetitions": "CorRep"})
+# print("====The easies items=========================")
+# # Ustawienie maksymalnej liczby kolumn do wyświetlenia na brak limitu
+# df3['question2'] = df3['question'].str[0:15]
+# print(df3[['question2', 'answer', 'CorRep']])
