@@ -1,10 +1,17 @@
 import json
-import pandas as pd
-from learning_item import LearningItem
+import os
 
-FOLDER_PATH = "E:\\Mi unidad\\_PYTHON\\PycharmProjects\\memoryBooster\\data\\"
-SOURCE_FILE = "data_esp.txt"
-RESULT_FILE = "data_esp.json"
+import os
+from learning_item import LearningItem
+import items_analysis
+
+FOLDER_PATH = os.getenv('FOLDER_PATH')
+SOURCE_FILE = os.getenv('SOURCE_FILE')
+RESULT_FILE = os.getenv('RESULT_FILE')
+
+print(FOLDER_PATH)
+print(SOURCE_FILE)
+print(RESULT_FILE)
 
 
 def parse_boolean(line):
@@ -61,34 +68,6 @@ def json_from_learning_items_to_file(learning_elements, file_path):
         json.dump([item.__dict__ for item in learning_items], file, indent=4, ensure_ascii=False)
 
 
-def hardest_questions(df, amount):
-    result = (df.nlargest(amount, 'number_of_incorrect_repetitions')
-              .rename(columns={"number_of_incorrect_repetitions": "IncRep"}))
-    print("====The most difficult items=================")
-    print(result[['questions', 'answers', 'IncRep']])
-
-
-def easiest_questions(df, amount):
-    result = (((df[df.number_of_incorrect_repetitions == 0]
-                .sort_values('number_of_incorrect_repetitions', ascending=False))
-               .nlargest(amount, 'number_of_correct_repetitions'))
-              .rename(columns={"number_of_correct_repetitions": "CorRep"}))
-    print("====The easies items=========================")
-    print(result[['questions', 'answers', 'CorRep']])
-
-
-def show_items(learning_items, amount, is_hardest):
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', None)
-    pd.set_option('display.expand_frame_repr', False)
-    data = [item.__dict__ for item in learning_items]
-    df = pd.DataFrame(data)
-    if is_hardest:
-        hardest_questions(df, amount)
-    else:
-        easiest_questions(df, amount)
-
-
-learning_items = learning_items_from_file(FOLDER_PATH + SOURCE_FILE)
-json_from_learning_items_to_file(learning_items, FOLDER_PATH + RESULT_FILE)
-show_items(learning_items, 15, False)
+learning_items = learning_items_from_file(FOLDER_PATH + "\\" + SOURCE_FILE)
+json_from_learning_items_to_file(learning_items, FOLDER_PATH + "\\" + RESULT_FILE)
+items_analysis.show_items(learning_items, 15, False)

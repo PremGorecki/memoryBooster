@@ -1,0 +1,20 @@
+Introduction
+In PyCharm, you can define environment variables to configure your project settings.
+This README provides instructions on how to set up environment variables for your
+PyCharm project.
+
+Setting up Environment Variables
+Open your PyCharm project.
+Go to Run -> Edit Configurations....
+Select your run/debug configuration from the left sidebar.
+In the configuration settings, navigate to the Environment variables section.
+Click on the + button to add a new environment variable.
+Add the following environment variables with their respective values:
+FOLDER_PATH: "E:\Mi unidad_PYTHON\PycharmProjects\memoryBooster\data"
+SOURCE_FILE: "data_esp.txt"
+RESULT_FILE: "data_esp.json"
+Click OK to save the configuration.
+Accessing Environment Variables in Your Code
+Once the environment variables are set up, you can access them in your Python code
+using the os.environ module. Here's an example of how to access these variables:
+
