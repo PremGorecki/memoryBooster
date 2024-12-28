@@ -5,9 +5,9 @@ import os
 from learning_item import LearningItem
 import items_analysis
 
-FOLDER_PATH = os.getenv('FOLDER_PATH')
-SOURCE_FILE = os.getenv('SOURCE_FILE')
-RESULT_FILE = os.getenv('RESULT_FILE')
+FOLDER_PATH = os.getenv('MEMORY_BOOSTER_FOLDER_PATH')
+SOURCE_FILE = os.getenv('MEMORY_BOOSTER_SOURCE_FILE')
+RESULT_FILE = os.getenv('MEMORY_BOOSTER_RESULT_FILE')
 
 print(FOLDER_PATH)
 print(SOURCE_FILE)
