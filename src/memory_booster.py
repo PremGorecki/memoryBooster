@@ -14,8 +14,8 @@ def show_menu():
     print('9 - Exit')
 
     try:
-        option = int(input('Choose an option: '))
-        return option
+        menu_option = int(input('Choose an option: '))
+        return menu_option
     except ValueError:
         print('Invalid input. Please enter a number.')
         return None
@@ -23,8 +23,8 @@ def show_menu():
 
 if __name__ == "__main__":
     while True:
-        option = show_menu()
-        match(option):
+        menu_option = show_menu()
+        match menu_option:
             case 0:
                 pass
             case 1:

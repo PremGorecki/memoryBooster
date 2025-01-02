@@ -1,9 +1,10 @@
 import json
 import os
-
-import os
 from learning_item import LearningItem
 import items_analysis
+import database
+from model import LearningItem
+
 
 FOLDER_PATH = os.getenv('MEMORY_BOOSTER_FOLDER_PATH')
 SOURCE_FILE = os.getenv('MEMORY_BOOSTER_SOURCE_FILE')
@@ -12,6 +13,8 @@ RESULT_FILE = os.getenv('MEMORY_BOOSTER_RESULT_FILE')
 print(FOLDER_PATH)
 print(SOURCE_FILE)
 print(RESULT_FILE)
+
+
 
 
 def parse_boolean(line):
@@ -25,7 +28,7 @@ def parse_int(line):
 def parsing_items_from_lines(lines, num_lines):
     learning_items = []
     i = 2
-    while (i < num_lines):
+    while i < num_lines:
         if lines[i].strip() == '-' * len(lines[i].strip()):
             i += 1
             continue
@@ -57,7 +60,6 @@ def learning_items_from_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         lines = file.readlines()
 
-    number_of_units = int(lines[0])
     num_lines = len(lines)
 
     return parsing_items_from_lines(lines, num_lines)
@@ -68,6 +70,20 @@ def json_from_learning_items_to_file(learning_elements, file_path):
         json.dump([item.__dict__ for item in learning_items], file, indent=4, ensure_ascii=False)
 
 
-learning_items = learning_items_from_file(FOLDER_PATH + "\\" + SOURCE_FILE)
-json_from_learning_items_to_file(learning_items, FOLDER_PATH + "\\" + RESULT_FILE)
-items_analysis.show_items(learning_items, 15, False)
+#learning_items = learning_items_from_file(FOLDER_PATH + "\\" + SOURCE_FILE)
+# for item in learning_items:
+#     print(item.id)
+#     print(item.is_taught)
+#     print(item.questions)
+
+#json_from_learning_items_to_file(learning_items, FOLDER_PATH + "\\" + RESULT_FILE)
+#items_analysis.show_items(learning_items, 15, False)
+
+#print(learning_items)
+
+items = database.DbConnect()
+
+for item in items:
+    print(item.questions)
+
+
